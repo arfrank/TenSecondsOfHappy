@@ -1,0 +1,22 @@
+{% extends "base_index.html" %}
+{% block content %}
+<br />Change Contests
+<div id="contest">
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Change Info</th>
+		<th>View Entries</th>
+		<th>Active</th>
+	</tr>
+{% for contest in contests %}
+	<tr>
+		<td>{{contest.name}}</td>
+		<td><a href="/admin/changeContest?id={{contest.key.id}}">Change Info</a></td>
+		<td><a href="/viewEntries?id={{contest.key.id}}">View Entries</a></td>
+		<td>{% if contest.active %}Yes{% else %}No{% endif %}</td>
+	</tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

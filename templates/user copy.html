@@ -1,0 +1,26 @@
+{% extends "base_index.html" %}
+{% block content %}
+<br />
+Drawings by {{ author }}
+<br />
+{% for smile in smiles %}
+	{% if forloop.counter0|divisibleby:"4" %}
+	<br />
+	{% endif %}
+	<a href="/view?id={{smile.key.id}}"><img class="thumbs" id="smile{{ smile.key.id }}" alt="{{smile.key.id}}" src="{% if smile.image %}{{ smile.image }}{% endif %}" /></a>
+{% endfor %}
+<br />
+{% ifnotequal page 1 %}
+{% ifnotequal smilelength 0 %}
+<a href="/user?page={{ page|add:"-1" }}{% if smiley_id %}&smiley_id={{smiley_id}}{% endif %}">Prev Page</a>
+{% else %}
+<a href="/user?page=1{% if smiley_id %}&smiley_id={{smiley_id}}{% endif %}">Prev Page</a>
+{% endifnotequal %}
+{% ifequal smilelength 12%}
+ | 
+{% endifequal %}
+{% endifnotequal %}
+{% ifequal smilelength 12 %}
+<a href="/user?page={{ page|add:"1" }}{% if smiley_id %}&smiley_id={{smiley_id}}{% endif %}">Next Page</a>
+{% endifequal %}
+{% endblock %}

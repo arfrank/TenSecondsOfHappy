@@ -1,0 +1,6 @@
+{% extends "draw.html" %}
+{% block contestinfo %}
+<div id="contestInfo"><h3>{{contest.name}}</h3>{{contest.desc}}</div>
+{% endblock %}
+{% block forminfo %}<form action="enter" method="post" onSubmit="javascript:convertImage()">{% endblock%}
+{% block extraform %}<input type="hidden" name="contest_id" value={{contest.key.id}} />{% endblock %}

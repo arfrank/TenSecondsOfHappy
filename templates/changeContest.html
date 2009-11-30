@@ -1,0 +1,44 @@
+{% extends "base_index.html" %}
+{% block extrajava %}
+<script src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	google.load("jquery", "1.3.2");
+	google.load("jqueryui", "1.7.2");
+</script>
+<link rel=stylesheet href="/stylesheets/jquery-ui-1.7.2.custom.css" type="text/css" media=screen></link>
+{% endblock %}
+{% block content %}
+<h1>Change Contest Info</h1>
+<form method="post" action="/admin/changeContest" name="changeContest">
+<table id="admin">
+	<tr>
+		<td>Name</td>
+		<td><input type="text" id="name" name="name" size="45" value="{{contests.name}}"/></td>
+	</tr>
+	<tr>
+		<td>Description</td>
+		<td><textarea name="desc" cols="40" rows="5"/>{{contests.desc}}</textarea></td>
+	</tr>
+	<tr>
+		<td><input id="start" type="hidden" name="start" /><div id="startdatepicker"></div></td>
+		<td><input id="end" type="hidden" name="end" /><div id="enddatepicker"></div></td>
+	</tr>
+	<tr>
+		<td>Start Date</td>
+		<td>End Date</td>
+	</tr>
+	<tr>
+		<td>Activate</td>
+		<td><input type="checkbox" name="activate" {%if contests.active %}checked="checked"{% endif %}>
+			<input type="hidden" name="key" value="{{contests.key.id}}"></td>
+	</tr>
+</table>
+<input id="submit" type="submit" value="Submit" />
+</form>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#startdatepicker').datepicker({altField: '#start', altFormat: 'mm-dd-y',defaultDate:new Date("{{contests.start_date.year}}","{{contests.start_date.month|add:"-1"}}","{{contests.start_date.day}}")});
+		$('#enddatepicker').datepicker({altField: '#end', altFormat: 'mm-dd-y',defaultDate: new Date("{{contests.end_date.year}}","{{contests.end_date.month|add:"-1"}}","{{contests.end_date.day}}")});
+	});
+</script>
+{% endblock %}

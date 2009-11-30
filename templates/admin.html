@@ -1,0 +1,23 @@
+{% extends "base_index.html" %}
+{% block content%}
+<h1>Admin Functions</h1>
+<div id="admindiv">
+	<table id="admin">
+		<tr>
+			<th>Monitoring</th>
+			<th>Stats</th>
+			<th>Contests</th>
+			<th>Tink</th>
+		</tr>
+		<tr>
+			<td><a href="/admin/delete">Delete Drawing</a></td>
+			<td></td>
+			<td><a href="/admin/addContest">Add Contest</a></td>
+			<td></td>
+		</tr>
+		<tr><td><a href="/admin/feature">Feature Drawing</a></td><td></td><td><a href="/admin/changeContest">Change Contest</a></td><td></td></tr>
+		<tr><td></td><td></td><td>Delete Contest</td><td></td></tr>
+		<tr><td></td><td></td><td>Activate Contest</td><td></td></tr>
+	</table>
+</div>
+{% endblock %}

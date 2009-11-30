@@ -1,0 +1,57 @@
+{% extends "base_index.html" %}
+{% block extrajava %}
+<script src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	google.load("jquery", "1.3.2");
+</script>
+{% endblock %}
+{% block content %}
+<style type="text/css">
+	.thumbs:hover{
+		background:#AAAAAA;
+	}
+	.chosen{
+		background:#CF22F0!important;
+	}
+</style>
+<br />
+<span>Click on the one you would like to flag. It will not delete the photo, just move it towards the end of recent drawings.
+{% for smile in smiles %}
+	{% if forloop.counter0|divisibleby:"4" %}
+	<br />
+	{% endif %}
+	<img class="thumbs {% if smile.flags %}chosen{% endif %}" id="smile{{ smile.key.id }}" alt="{{smile.key.id}}" src="">
+{% endfor %}
+<br />
+{% ifnotequal page 1 %}
+<a href="/admin/flagDraw?page={{ page|add:"-1" }}">Prev Page</a> - 
+{% endifnotequal %}
+<a href="/admin/flagDraw?page={{ page|add:"1" }}">Next Page</a>
+
+<script type="text/javascript">
+	function showImage(){
+		{% for smile in smiles %}
+			{% if smile.image %}
+			img{{ smile.key.id }}=document.getElementById("smile{{ smile.key.id }}");
+			img{{ smile.key.id }}.src='{{ smile.image }}';
+			{% endif %}
+		{% endfor %}
+	}
+	$(document).ready(function(){
+		showImage();
+		$('.thumbs').live('click',function(){
+			if(confirm('Are you sure you want to flag this drawing?')){
+				$(this).addClass('chosen');
+				$.ajax({
+					type:"GET",
+					dataType:"json",
+					url:"/ajax/ajaxFlag",
+					data:({id:$(this).attr('alt'),flag:1})
+				});
+			}else{
+				$(this).removeClass('chosen');
+			}
+		});
+	});
+</script>
+{% endblock %}

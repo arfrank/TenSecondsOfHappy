@@ -1,0 +1,20 @@
+{% extends "base_many.html" %}
+{% block toptext %}
+<br />
+Drawings by {{ author }}
+{% endblock %}
+{% block paging%}
+{% ifnotequal page 1 %}
+{% ifnotequal smilelength 0 %}
+<a href="/user?page={{ page|add:"-1" }}{% if smiley_id %}&smiley_id={{smiley_id}}{% endif %}">Prev Page</a>
+{% else %}
+<a href="/user?page=1{% if smiley_id %}&smiley_id={{smiley_id}}{% endif %}">Prev Page</a>
+{% endifnotequal %}
+{% ifequal smilelength 12%}
+ | 
+{% endifequal %}
+{% endifnotequal %}
+{% ifequal smilelength 12 %}
+<a href="/user?page={{ page|add:"1" }}{% if smiley_id %}&smiley_id={{smiley_id}}{% endif %}">Next Page</a>
+{% endifequal %}
+{% endblock %}

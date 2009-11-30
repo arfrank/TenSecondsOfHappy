@@ -1,0 +1,196 @@
+body{
+	text-align:center;
+	width:1050px;
+	background:#c3c3c3;
+	margin-left: 100px;
+	margin-top:15px;
+}
+.hidden{
+	display:none;
+}
+#goNext{
+	position:absolute;
+	left:740px;
+	top:265px;
+}
+#goPrev{
+	position:absolute;
+	left:270px;
+	top:265px;
+}
+
+#bottom{
+	position:absolute;
+	top:550px;
+	left:400px;
+}
+#main{
+	width:850px;
+	min-height:580px;
+	height:610px;
+	background-color:#ffffff;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+#ad_left{
+	float:left;
+	margin-left:10px;
+}
+#ad_right{
+	width:160px;
+	float:right;
+	margin-right:10px;
+}
+#top {
+	-webkit-border-top-left-radius:10px;
+	-webkit-border-top-right-radius:10px;
+	-moz-border-radius-topleft:10px;
+	-moz-border-radius-topright:10px;	
+	border-top-left-radius:10px;
+	border-top-left-radius:10px;
+	background:#666666;
+	padding:20px;
+	margin-top:10px;
+}
+#up{
+	margin-left:3px;
+}
+#down{
+	margin-left:3px;
+}
+.vote:hover{
+	background:#999999;
+}
+#smile{
+	margin-top:25px;
+}
+.thumbs{
+	padding:5px;
+	width:100px;
+	height:100px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	border: 3px solid #000;
+}
+#email{
+	text-align:left;
+	width:200px;
+}
+#top span{
+	background:#ffffff;
+	border:1px solid #000000;
+	padding:10px;
+	display:inline;
+	list-style:none;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#top span:hover{
+	background:#000000;
+	color:#ffffff;
+}
+
+
+h1 {
+	font-size: 14pt;
+	font-style: italic;
+	margin-bottom: 8px;
+}
+a {
+	text-decoration: none;
+	color: black;
+}
+canvas {
+	border: 1px solid #AAAAAA;
+}
+#canvas {
+	position: absolute;
+	left: 240px;
+	top: 90px;
+}
+#canvasInterface {
+	position: absolute;
+	left: 240px;
+	top: 90px;
+}
+#noCanvas {
+	position: absolute;
+	left: 90px;
+	top: 100px;
+	width: 400px;
+	height: 400px;
+	font-size: 16px;
+}
+#chooserWidgets {
+	display: block;
+	position: absolute;
+	left: 650px;
+	width: 300px;
+	top: 320px;
+}
+#chooserWidgets canvas {
+	margin-bottom: 10px;
+}
+#controls {
+	position: absolute;
+	top: 500px;
+	left: 250px;
+	font-size: 12px;
+	width: 70px;
+}
+.ctr_btn {
+	overflow: hidden;
+	width: 70px;
+	height: 20px;
+	cursor: pointer; 
+	padding-left: 3px; 
+	margin-bottom: 2px;
+	border:1px solid #AAAAAA; 
+	background:#FFFFFF;
+}
+#cpainterInfo {
+	position: absolute;
+	left: 500px;
+	top: 320px;
+}
+#admin{
+	margin:0 auto;
+	width:75%;
+}
+
+td{
+	text-align:left;
+}
+table a{
+	text-decoration:underline;
+}
+.admincell{
+	text-align:left;
+}
+#bottom{
+}
+
+#contestInfo{
+	position:absolute;
+	width:250px;
+	top:100px;
+	left:675px;
+}
+
+#content{
+	margin-top:5px;
+}
+#contest{
+	margin:0 auto;
+	text-align:left;
+	width:700px;
+}
+#errorArea {
+	position: absolute;
+	width: 200px;
+	left: 800px;
+}

@@ -1,0 +1,33 @@
+{% extends "base_index.html" %}
+{% block content %}
+<br /><h1>All Contests</h1>
+<div id="contest">
+<table border="3">
+	<tr>
+		<th width="100">Name</th>
+		<th width="200">Descriptions</th>
+		<th width="100">Start Date</th>
+		<th width="100">End Date</th>
+		<th width="75">View Entries</th>
+		<th width="50">Enter Contest</th>
+		<th>#</th>
+		
+	</tr>
+{% for contest in contests %}
+{% if contest.active %}
+	<tr>
+		<td>{{contest.name}}</td>
+		<td>{{contest.desc}}</td>
+		<td>{{contest.start_date.month}}/{{contest.start_date.day}}/{{contest.start_date.year}}</td>
+		<td>{{contest.end_date.month}}/{{contest.end_date.day}}/{{contest.end_date.year}}</td>
+		<td><a href="/entries?contest_id={{contest.key.id}}">View</a></td>
+		<td>{% if user %}<a href="/enter?contest_id={{contest.key.id}}">{% else %}<a href="/enterLogin?contest_id={{contest.key.id}}">{% endif %}<strong>Enter</strong></a></td>
+		<td>{{contest.num_entries}}</td>
+	</tr>
+{% endif %}
+{% endfor %}
+</table>
+<br />
+<b>You must be logged in to enter a contest.</b><br />Clicking the "Enter" link while not logged in, will redirect you to login and then to the contest entry page.
+</div>
+{% endblock %}

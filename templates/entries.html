@@ -1,0 +1,321 @@
+{% extends "base_index.html" %}
+{% block extrajava %}
+<script src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	google.load("jquery", "1.3.2");
+</script>
+{% endblock %}
+{% block content %}
+{% block toptext %}
+{% endblock %}
+<div id="all">
+Contest Entries: {{ contest.name }}
+{% for smile in smiles %}
+	{% if forloop.counter0|divisibleby:"4" %}
+	<br />
+	{% endif %}
+		<span id="{{ forloop.counter }}"><img class="thumbs" id="smile{{ smile.smiley.key.id }}" title="{{ smile.smiley.author }}" alt="{{smile.smiley.key.id}}" src="" /></span>
+{% endfor %}
+<br /><br />
+<strong>Controls</strong><br />
+<strong>Click</strong>: Toggle size |  <strong>Left</strong>: Prev | <strong>Right</strong>: Next{% if user%} | <strong>Up</strong>: +Vote | <strong>Down</strong>: -Vote{% endif %}
+<br /><br />
+{% block paging %}
+{% ifnotequal page 1 %}
+{% ifnotequal smilelength 0 %}
+<a href="/{{ pageName }}?page={{ page|add:"-1" }}&contest_id={{contest.key.id}}">Prev Page</a>
+{% else %}
+<a href="/{{ pageName }}?page=1&contest_id={{contest.key.id}}">Prev Page</a>
+{% endifnotequal %}
+{% ifequal smilelength 12%}
+ | 
+{% endifequal %}
+{% endifnotequal %}
+{% ifequal smilelength 12 %}
+<a href="/{{ pageName }}?page={{ page|add:"1" }}&contest_id={{contest.key.id}}">Next Page</a>
+{% endifequal %}
+{% endblock %}
+</div>
+<div class="hidden" id="indImage">
+	<img class="back" id="indSmile" src="" /><br />
+	<button id="goNext" class="butt next">Next</button>
+	<button id="goPrev" class="butt prev">Prev</button>
+	<div>
+	<table style="margin:0 auto; text-align:left">
+	<tr><td><strong>By</strong>:</td><td><a id="authorLink" href="/user?smiley_id={{ info.key.id }}"><span id="authorName"></span></a></td><td><strong>On</strong>:</td><td id="imageDate"></td></tr>
+	<tr><td colspan="2">Ups: <span id="upVotes"></span>{% if user %}<img class="vote" id="up" alt="up" src="/assets/up_non.gif">{% endif %}</td>
+		<td colspan="2">Downs: <span id="downVotes"></span>{% if user %}<img class="vote" id="down" alt="down" src="/assets/down_non.gif">{% endif %}</td></tr>
+	{% if user %}<tr><td colspan="4"><span id="emailq"><button>Share this drawing</button></span><span id="email"></span></td></tr>{% endif %}
+	</table>
+	
+</div>
+<script type="text/javascript">
+	var page={{ page }};
+	var max={{smilelength}};
+	var min=1;
+	function showImage(){
+		{% for smile in smiles %}
+				img{{ smile.smiley.key.id }}='{{ smile.smiley.image }}';
+				$("#smile{{ smile.smiley.key.id }}").data('date','{{ smile.smiley.create_at|date:"n/j/y @ g:i A" }}').data('ups','{{ smile.smiley.ups }}').data('downs','{{ smile.smiley.downs }}').data('counter',{{ forloop.counter }}).attr('src',img{{ smile.smiley.key.id }});
+				{% endfor %}
+	}
+	$(document).ready(function(){
+		showImage();
+		$('.thumbs').live('click',function(){
+			imageID=$(this).attr('alt');
+			{% if user %}
+						$('#up').attr('src','/assets/up_non.gif');
+						$('#down').attr('src','/assets/down_non.gif');
+						$.ajax({
+							type:"GET",
+							dataType:"json",
+							url:'/ajax/checkVote',
+							data:({id:imageID}),
+							success: function(data){
+								$('.votes').removeClass('hidden');
+								$('#upVotes').html(data.ups);
+								$('#downVotes').html(data.downs);
+								switch(data.myVote){
+									case 'up':
+										$('#up').attr('src','/assets/up.gif');
+										$('#down').attr('src','/assets/down_non.gif');
+									break;
+
+									case 'down':
+										$('#down').attr('src','/assets/down.gif');				
+										$('#up').attr('src','/assets/up_non.gif');
+									break;
+									
+									default:
+										$('#down').attr('src','/assets/down_non.gif');
+										$('#up').attr('src','/assets/up_non.gif');									
+									break;
+								}
+							},
+							error: function(){
+								$('.vote').addClass('hidden');
+							}
+						});
+			{% endif %}
+			$('#all').addClass('hidden');
+			$('#indImage').removeClass('hidden');
+			$('.butt').removeClass('hidden');
+			$('#indSmile').attr('src',$(this).attr('src')).data('curID',$(this).attr('id'));
+			$('#authorLink').attr('href','/user?smiley_id='+$(this).attr('alt'));
+			$('#authorName').html($(this).attr('title'));
+			$('#imageDate').html($(this).data('date'));
+			$('#upVotes').html($(this).data('ups'));
+			$('#downVotes').html($(this).data('downs'));
+		});
+		$('.back').live('click',function(){
+			$('#all').removeClass('hidden');
+			$('#indImage').addClass('hidden');
+		});
+		$('.next').live('click',function(){
+//			have to add to make sure that it is in range 0 til 12
+			var counter = $('#'+$('#indSmile').data('curID')).data('counter')+1;
+			if(counter>max){
+				getMore(counter)
+			}else{
+				$('.butt').removeClass('hidden');
+				changeImage(counter);
+			}
+		});
+		
+		$('.prev').live('click',function(){
+//			have to add to make sure that it is in range 0 til 12
+			var counter = $('#'+$('#indSmile').data('curID')).data('counter')-1;
+			if(counter<min){
+				getMore(counter);
+			}else{
+				$('.butt').removeClass('hidden');
+				changeImage(counter);
+			}
+		});
+		function getMore(counter){
+			$.ajax({
+				type:"GET",
+				dataType:"json",
+				url:'/ajax/getMore',
+				data:({'page':page,'counter':counter,'pageType':'{{pageName}}','contest_id':{{ contest.key.id }}}),
+				success: function(data){
+					switch(data.response){
+						case 'end':
+							if(counter>max){
+								$('.next').addClass('hidden');
+							}else{
+								$('.prev').addClass('hidden');
+							}
+						break;
+						case 'success':
+							$('#all').append("<span class='hidden' id='"+counter+"'><img src='"+data.image+"' alt='"+data.smile_id+"' title='"+data.author+"' id='smile"+data.smile_id+"'></span>");
+							$('#smile'+data.smile_id).data('date',data.date).data('ups',data.ups).data('downs',data.downs).data('counter',counter);
+//							$("#smile{{ smile.key.id }}").data('date','{{ smile.create_at|date:"n/j/y @ g:i A" }}').data('ups','{{ smile.ups }}').data('downs','{{ smile.downs }}').data('counter',{{ forloop.counter }});
+							if(counter>max){
+								max=counter;
+								$('.next').click();
+							}else if(counter<min){
+								min=counter;	
+								$('.prev').click();							
+							}
+						break;
+						default:
+
+						break;
+					}
+				},
+				error : function(){
+					return;
+				}
+			});
+		}
+		function changeImage(counter){
+			imgObj=$('#'+counter).children('img');
+			imageID=imgObj.attr('alt');
+			{% if user %}
+			$('#up').attr('src','/assets/up_non.gif');
+			$('#down').attr('src','/assets/down_non.gif');
+			$.ajax({
+				type:"GET",
+				dataType:"json",
+				url:'/ajax/checkVote',
+				data:({id:imageID}),
+				success: function(data){
+					$('.votes').removeClass('hidden');
+					$('#upVotes').html(data.ups);
+					$('#downVotes').html(data.downs);
+					switch(data.myVote){
+						case 'up':
+							$('#up').attr('src','/assets/up.gif');
+							$('#down').attr('src','/assets/down_non.gif');
+						break;
+
+						case 'down':
+							$('#down').attr('src','/assets/down.gif');				
+							$('#up').attr('src','/assets/up_non.gif');
+						break;
+						
+						default:
+							$('#down').attr('src','/assets/down_non.gif');
+							$('#up').attr('src','/assets/up_non.gif');									
+						break;
+					}
+				},
+				error: function(){
+					$('.vote').addClass('hidden');
+				}
+			});
+			{% endif %}
+			$('#indSmile').attr('src',imgObj.attr('src')).data('curID',imgObj.attr('id'));
+			$('#authorLink').attr('href','/user?smiley_id='+imgObj.attr('alt'));
+			$('#authorName').html(imgObj.attr('title'));
+			$('#imageDate').html(imgObj.data('date'));
+			$('#upVotes').html(imgObj.data('ups'));
+			$('#downVotes').html(imgObj.data('downs'));
+			
+		}
+		function keyNav(e){
+			if(!$('#indImage').hasClass('hidden')){
+				switch(e.keyCode){
+					case 39:
+						$('.next').click();
+					break;
+					case 37:
+						$('.prev').click();
+					break;
+{% if user %}				
+					case 38:
+						$('#up').click();
+					break;
+					case 40:
+						$('#down').click();
+					break;
+{% endif %}
+				}
+			}
+		}
+		if ($.browser.mozilla) {
+//keypress
+		    $(document).keyup(keyNav);
+		} else {
+//keydown		   
+		 	$(document).keyup(keyNav);
+		}
+{% if user %}
+		var voteType='';
+		$('#emailq').click(function(){
+			$('#emailq').html("");
+			$('#email').html("<span id='process'>Email: <input type='text' id='emailad' /><br /><span id='sbtbut'><button id='subbut'>Send Email</button></span></span>");
+		});
+		$('#subbut').live("click",function(){
+			$.ajax({
+				type:"GET",
+				dataType:"json",
+				url:"/ajax/ajaxEmail",
+				data:({id:imageID,email:$('#emailad').val()}),
+				beforeSend: function(){
+					$('#sbtbut').html('<img alt="processing" src="/assets/processing.gif">');					
+				},
+				success: function(){
+					$('#sbtbut').html("<span id='sbtbut'>Email Sent! <button id='subbut'>Send Another</button>");
+					$('#emailad').val('');					
+				},
+				error: function(){
+						$('#sbtbut').html("Error sending email. Try again. <button id='subbut'>Send Email</button>");
+				}
+				
+			});
+		});
+		$('.vote').live('click',function(){
+			switch($(this).attr('alt')){
+				//set the votetype also change votes values?
+				case 'up':
+					//check if down voted
+					if($('#down').attr('src')=='/assets/down.gif'){
+						voteType='up';
+					}else if($(this).attr('src')=='/assets/up_non.gif'){
+						voteType='up';
+					}else{
+						voteType='neutral';
+					}
+					break;				
+				case 'down':
+					if($('#up').attr('src')=='/assets/up.gif'){
+						voteType='down';
+					}else if($(this).attr('src')=='/assets/down_non.gif'){
+						voteType='down';
+					}else{
+						voteType='neutral';
+					}
+					break;		
+			}
+			jObj=$(this);
+			$.ajax({
+				type:"GET",
+				dataType:"json",
+				url:"/ajax/ajaxVote",
+				data:({id:imageID,vote:voteType}),
+				success: function(data){
+					switch(voteType){
+						case 'up':
+							$('#down').attr('src','/assets/down_non.gif');
+							$('#up').attr('src','/assets/up.gif');	
+						break;
+						case 'neutral':
+							$('#down').attr('src','/assets/down_non.gif');
+							$('#up').attr('src','/assets/up_non.gif');	
+						break;
+						case 'down':
+							$('#up').attr('src','/assets/up_non.gif');	
+							$('#down').attr('src','/assets/down.gif');
+						break;
+					}
+					$('#upVotes').html(data.ups);
+					$('#downVotes').html(data.downs);
+				}
+			});
+		});
+		{% endif %}		
+	});
+</script>
+{% endblock %}

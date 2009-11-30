@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+	<channel>
+		<title>Ten Seconds of Happy New Drawing Feed</title>
+		<link>http://www.tensecondsofhappy.com/</link>
+		<description>RSS 2.0 feed containing the latest Ten Seconds of Happy Drawings</description>
+		<language>en-us</language>
+		<generator>rssGoogleCode</generator>
+		<webMaster>arfrank@tensecondsofhappy.com</webMaster>"""
+		{% for smile in smiles %}
+		<item>
+			<title>New drawing at Ten Seconds of Happy from {{ smile.author }}</title>
+			<link>http://www.tensecondsofhappy.com/view?id={{ smile.key.id }}</link>
+			<description>Drawing created by {{smile.author}} at {{smile.create_at}}</description>
+			<guid>{{smile.key.id}}</guid>
+		</item>
+		{% endfor %}
+	</channel>
+</rss>

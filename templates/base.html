@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta name="description" content="Explore 10 seconds of happiness at 10 Seconds of Happy by drawing to your heart's content" /> 
+		<meta name="keywords" content="MS Paint, Drawing, Happy, 10 Seconds of Happy, Online painting, painting" />
+		<meta name="author" content="Aaron Frank" />
+		<link rel=stylesheet href="/stylesheets/style.css" type="text/css" media=screen></link>
+			{% block extrajava %}{% endblock%}
+		<title>{% block title %}Ten Seconds of Happy{% endblock %}</title>
+	</head>
+	<body>
+		<div id="ad_right">
+<script type="text/javascript"><!--
+google_ad_client = "pub-6502960257601467";
+/* 160x600, created 10/14/09 */
+google_ad_slot = "3090734312";
+google_ad_width = 160;
+google_ad_height = 600;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<div id="main">
+		<div id="top">
+				<a href="/"><span>Home</span></a>
+				<a href="/top"><span>Top</span></a>
+				<a href="/more"><span>Recent</span></a>
+				{% if user %}<a href="/vote"><span>Vote</span></a>{% endif %}
+				<a href="/AllContests"><span>Contests</span></a>
+				<a href="/about"><span>About</span></a>
+				{% if user %}<a href="/logout"><span>Logout</span></a>
+				{% else %}<a href="/login"><span>Login</span></a>{% endif %}
+		</div>
+		<div id="content">
+			{% block content %}
+			{% endblock %}
+			</div>
+			{% block bottom %}
+			<br />
+			<a href="http://www.twitter.com/10happyseconds">Twitter</a> - <a href="/newRSS">RSS</a> - Ten Seconds of Happy &copy; 2009 - <a href="/tos">Terms</a>
+			{% endblock %}
+		</div>
+		<script type="text/javascript">
+		var domainy = location.protocol == "https:" ? "https://static.getclicky.com" : "http://static.getclicky.com";
+		document.write(unescape("%3Cscript src='" + domainy + "/135141.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		<script type="text/javascript">
+		try {
+		var pageTracker = _gat._getTracker("UA-10755578-1");
+		pageTracker._trackPageview();
+		} catch(err) {}</script>
+<!--		<script type="text/javascript">
+		  var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
+		  document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
+		</script>
+		<script type="text/javascript">
+		UserVoice.Tab.show({ 
+		  /* required */
+		  key: 'tensecondsofhappy',
+		  host: 'tensecondsofhappy.uservoice.com', 
+		  forum: '29689', 
+		  /* optional */
+		  alignment: 'left',
+		  background_color:'#fff', 
+		  text_color: 'black',
+		  hover_color: '#06C',
+		  lang: 'en'
+		})
+		</script>-->
+		<!--[if IE 6]>
+		<script type="text/javascript"> 
+			var IE6UPDATE_OPTIONS = {
+				icons_path: "http://static.ie6update.com/hosted/ie6update/images/"
+			}
+		</script>
+		<script type="text/javascript" src="http://static.ie6update.com/hosted/ie6update/ie6update.js"></script>
+		<![endif]-->
+	</body>
+</html>

@@ -1,0 +1,54 @@
+{% extends "base_index.html" %}
+{% block extrajava %}
+<script src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	google.load("jquery", "1.3.2");
+</script>
+{% endblock %}
+{% block content %}
+<style type="text/css">
+	.thumbs:hover{
+		background:#AAAAAA;
+	}
+	.chosen{
+		background:#FF0000!important;
+	}
+</style>
+<br />
+<span>Click on the one you would like to delete. You will be prompted to confirm.
+{% for smile in smiles %}
+	{% if forloop.counter0|divisibleby:"4" %}
+	<br />
+	{% endif %}
+	<img class="thumbs" id="smile{{ smile.key.id }}" alt="{{smile.key.id}}" src="">
+{% endfor %}
+<br />
+{% ifnotequal page 1 %}
+<a href="/admin/delete?page={{ page|add:"-1" }}">Prev Page</a> - 
+{% endifnotequal %}
+<a href="/admin/delete?page={{ page|add:"1" }}">Next Page</a>
+
+<script type="text/javascript">
+	function showImage(){
+		{% for smile in smiles %}
+			{% if smile.image %}
+			img{{ smile.key.id }}=document.getElementById("smile{{ smile.key.id }}");
+			img{{ smile.key.id }}.src='{{ smile.image }}';
+			{% endif %}
+		{% endfor %}
+	}
+	$(document).ready(function(){
+		showImage();
+		$('.thumbs').live('click',function(){
+			$(this).addClass('chosen');
+			if(confirm('Are you sure you want to delete this drawing?')){
+				$.post('/admin/delete',{smileid:$(this).attr('alt')},function(){
+					location.reload();
+				});
+			}else{
+				$(this).removeClass('chosen');
+			}
+		});
+	});
+</script>
+{% endblock %}
