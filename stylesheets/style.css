@@ -56,6 +56,9 @@ body{
 #up{
 	margin-left:3px;
 }
+#paging{
+	padding-top:10px;
+}
 #down{
 	margin-left:3px;
 }
@@ -171,7 +174,16 @@ table a{
 .admincell{
 	text-align:left;
 }
-#bottom{
+#bottom-many{
+	padding-top:10px;
+}
+#ctrols{
+	padding-top:10px;
+}
+
+#toptext{
+	font-weight:bold;
+	padding-top:10px;
 }
 
 #contestInfo{

@@ -1,7 +1,6 @@
 {% extends "base_many.html" %}
 {% block toptext %}
-<br />
-Drawings by {{ author }}
+<div id="toptext">Drawings by {{ author }}</div>
 {% endblock %}
 {% block paging%}
 {% ifnotequal page 1 %}

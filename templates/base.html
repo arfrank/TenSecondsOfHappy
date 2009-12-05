@@ -24,10 +24,11 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script></div>
 <div id="main">
 		<div id="top">
-				<a href="/"><span>Home</span></a>
+				<a href="/"><span>Draw!</span></a>
 				<a href="/top"><span>Top</span></a>
 				<a href="/more"><span>Recent</span></a>
-				{% if user %}<a href="/vote"><span>Vote</span></a>{% endif %}
+				{% if user %}<a href="/vote"><span>Vote</span></a>
+				<a href="/user"><span>Your Drawings</span></a>{% endif %}
 				<a href="/AllContests"><span>Contests</span></a>
 				<a href="/about"><span>About</span></a>
 				{% if user %}<a href="/logout"><span>Logout</span></a>
@@ -38,8 +39,9 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 			{% endblock %}
 			</div>
 			{% block bottom %}
-			<br />
+			<div id="bottom-many">
 			<a href="http://www.twitter.com/10happyseconds">Twitter</a> - <a href="/newRSS">RSS</a> - Ten Seconds of Happy &copy; 2009 - <a href="/tos">Terms</a>
+			</div>
 			{% endblock %}
 		</div>
 		<script type="text/javascript">

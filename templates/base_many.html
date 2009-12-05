@@ -15,11 +15,9 @@
 	{% endif %}
 		<span id="{{ forloop.counter }}"><img class="thumbs" id="smile{{ smile.key.id }}" title="{{ smile.author }}" alt="{{smile.key.id}}" src="{{smile.image}}" /></span>
 {% endfor %}
-<br />
-<br />
-<strong>Controls</strong><br />
-<strong>Click</strong>: Toggle size |  <strong>Left</strong>: Prev | <strong>Right</strong>: Next{% if user%} | <strong>Up</strong>: +Vote | <strong>Down</strong>: -Vote{% endif %}
-<br /><br />
+<div id="ctrols"><strong>Controls</strong><br />
+<strong>Click</strong>: Toggle size |  <strong>Left</strong>: Prev | <strong>Right</strong>: Next{% if user%} | <strong>Up</strong>: +Vote | <strong>Down</strong>: -Vote{% endif %}</div>
+<div id="paging">
 {% block paging %}
 {% ifnotequal page 1 %}
 {% ifnotequal smilelength 0 %}
@@ -35,6 +33,7 @@
 <a href="/{{ pageName }}?page={{ page|add:"1" }}">Next Page</a>
 {% endifequal %}
 {% endblock %}
+</div>
 </div>
 <div class="hidden" id="indImage">
 	<img class="back" id="indSmile" src="" /><br />
@@ -57,7 +56,7 @@
 	var min=1;
 	function showImage(){
 		{% for smile in smiles %}{% if smile.image %}
-				$("#smile{{ smile.key.id }}").data('date','{{ smile.create_at|date:"n/j/y @ g:i A" }}').data('ups','{{ smile.ups }}').data('downs','{{ smile.downs }}').data('counter',{{ forloop.counter }}).data('perma',"http://www.tensecondsofhappy.com/view?id={{ smile.key.id}}");//.attr('src',img{{ smile.key.id }});
+				$("#smile{{ smile.key.id }}").data('date','{{ smile.create_at|date:"n/j/y @ g:i A" }}').data('ups','{{ smile.ups }}').data('downs','{{ smile.downs }}').data('counter',{{ forloop.counter }}).data('perma',"http://www.tensecondsofhappy.com/view?id={{ smile.key.id}}"){% ifequal page 1 %}{%ifequal forloop.counter0 0 %}.data('first',true){% endifequal %}{% endifequal %};//.attr('src',img{{ smile.key.id }});
 				{% endif %}{% endfor %}
 	}
 	$(document).ready(function(){
@@ -101,6 +100,12 @@
 			$('#all').addClass('hidden');
 			$('#indImage').removeClass('hidden');
 			$('.butt').removeClass('hidden');
+			if($(this).data('first')){
+				$('.prev').addClass('hidden');
+			}
+			if($(this).data('last')){
+				$('.next').addClass('hidden');
+			}
 			$('#indSmile').attr('src',$(this).attr('src')).data('curID',$(this).attr('id'));
 			$('#authorLink').attr('href','/user?smiley_id='+$(this).attr('alt'));
 			$('#authorName').html($(this).attr('title'));
@@ -115,7 +120,6 @@
 			$('#indImage').addClass('hidden');
 		});
 		$('.next').live('click',function(){
-//			have to add to make sure that it is in range 0 til 12
 			var counter = $('#'+$('#indSmile').data('curID')).data('counter')+1;
 			if(counter>max){
 				getMore(counter)
@@ -126,7 +130,6 @@
 		});
 		
 		$('.prev').live('click',function(){
-//			have to add to make sure that it is in range 0 til 12
 			var counter = $('#'+$('#indSmile').data('curID')).data('counter')-1;
 			if(counter<min){
 				getMore(counter);
@@ -140,14 +143,18 @@
 				type:"GET",
 				dataType:"json",
 				url:'/ajax/getMore',
-				data:({'page':page,'counter':counter,'pageType':'{{pageName}}'{% ifequal pageName 'user' %},'smiley_id':{{ smiley_id }}{% endifequal %}}),
+				data:({'page':page,'counter':counter,'pageType':'{{pageName}}'{% ifequal pageName 'user' %}{% if smiley_id %},'smiley_id':{{ smiley_id }}{% endif %}{% endifequal %}}),
 				success: function(data){
 					switch(data.response){
 						case 'end':
 							if(counter>max){
+								imgObj=$('#'+(counter-1)).children('img')
 								$('.next').addClass('hidden');
+								imgObj.data('last',true);
 							}else{
+								imgObj=$('#'+(counter+1)).children('img')
 								$('.prev').addClass('hidden');
+								imgObj.data('first',true);
 							}
 						break;
 						case 'success':
@@ -178,6 +185,12 @@
 			{% if user %}
 			$('#up').attr('src','/assets/up_non.gif');
 			$('#down').attr('src','/assets/down_non.gif');
+			if(imgObj.data('first')){
+				$('.prev').addClass('hidden');
+			}
+			if(imgObj.data('last')){
+				$('.next').addClass('hidden');
+			}
 			$.ajax({
 				type:"GET",
 				dataType:"json",

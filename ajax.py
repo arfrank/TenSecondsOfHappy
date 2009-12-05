@@ -150,10 +150,11 @@ class getMore(webapp.RequestHandler):
 					elif pageType=='user':
 						smiley_id=cgi.escape(self.request.get("smiley_id"))
 						if not smiley_id:
-							return
-						smiled=models.Smiley.get_by_id(int(smiley_id))
-						if smiled:
-							smile=models.Smiley().all().order('-create_at').filter('author',smiled.author).fetch(1,offset)
+							smile=models.Smiley().all().order('-create_at').filter('author',user).fetch(1,offset)
+						else:
+							smiled=models.Smiley.get_by_id(int(smiley_id))
+							if smiled:
+								smile=models.Smiley().all().order('-create_at').filter('author',smiled.author).fetch(1,offset)
 					elif pageType=='entries':
 						contest_id=cgi.escape(self.request.get("contest_id"))
 						if not contest_id:
